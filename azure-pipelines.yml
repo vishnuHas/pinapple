@@ -1,0 +1,27 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: agent-3  # Use your actual agent pool name here
+
+steps:
+# Step 1: Checkout code
+- checkout: self
+  displayName: 'Checkout code'
+
+# Step 2: Build and run unit tests
+- script: mvn clean test
+  displayName: 'Build and run unit tests'
+
+# Step 3: Publish test results
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/target/surefire-reports/TEST-*.xml'
+    testResultsFormat: 'JUnit'
+    failTaskOnMissingResultsFile: true
+  displayName: 'Publish Maven test results'
